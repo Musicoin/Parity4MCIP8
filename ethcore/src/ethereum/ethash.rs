@@ -259,7 +259,18 @@ impl Engine<EthereumMachine> for Arc<Ethash> {
 		let mut result_block_reward = reward + reward.shr(5) * U256::from(n_uncles);
 		let mut uncle_rewards = Vec::with_capacity(n_uncles);
 
-		if number >= self.ethash_params.mcip3_transition {
+		if number >= self.ethash_params.mcip8_transition {
+			result_block_reward = self.ethash_params.mcip8_miner_reward;
+			let ubi_contract = self.ethash_params.mcip3_ubi_contract;
+			let ubi_reward = self.ethash_params.mcip3_ubi_reward;
+			let dev_contract = self.ethash_params.mcip3_dev_contract;
+			let dev_reward = self.ethash_params.mcip3_dev_reward;
+
+			self.machine.add_balance(block, &author, &result_block_reward)?;
+			self.machine.add_balance(block, &ubi_contract, &ubi_reward)?;
+			self.machine.add_balance(block, &dev_contract, &dev_reward)?;
+
+		}	else if number >= self.ethash_params.mcip3_transition {
 			result_block_reward = self.ethash_params.mcip3_miner_reward;
 			let ubi_contract = self.ethash_params.mcip3_ubi_contract;
 			let ubi_reward = self.ethash_params.mcip3_ubi_reward;
