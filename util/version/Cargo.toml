@@ -3,8 +3,8 @@
 [package]
 name = "parity-version"
 # NOTE: this value is used for Parity version string.
-version = "1.9.5"
-authors = ["Parity Technologies <admin@parity.io>"]
+version = "1.9.52019"
+authors = ["Musicoin Team <team@musicoin.org>"]
 build = "build.rs"
 
 [package.metadata]
