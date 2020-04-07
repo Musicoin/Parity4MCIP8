@@ -113,6 +113,13 @@ pub struct EthashParams {
 	#[serde(rename="mcip8MinerReward")]
 	pub mcip8_miner_reward: Option<Uint>,
 
+	/// MCIP-8 is amazing
+	#[serde(rename="mcip8Transition")]
+	pub mcip10_transition: Option<Uint>,
+	/// See main EthashParams docs.
+	#[serde(rename="mcip8MinerReward")]
+	pub mcip10_miner_reward: Option<Uint>,
+
 	#[serde(rename="mcip3UbiReward")]
 	pub mcip3_ubi_reward: Option<Uint>,
 	/// See main EthashParams docs.
