@@ -271,7 +271,7 @@ impl Engine<EthereumMachine> for Arc<Ethash> {
 			let ubi_reward = self.ethash_params.mcip3_ubi_reward;
 			let dev_contract = self.ethash_params.mcip3_dev_contract;
 			let dev_reward = self.ethash_params.mcip3_dev_reward;
-s
+
 			self.machine.add_balance(block, &author, &result_block_reward)?;
 			self.machine.add_balance(block, &ubi_contract, &ubi_reward)?;
 			self.machine.add_balance(block, &dev_contract, &dev_reward)?;
