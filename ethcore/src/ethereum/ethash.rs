@@ -111,6 +111,12 @@ pub struct EthashParams {
 	/// MCIP-3 Block reward coin-base for miners.
 	pub mcip8_miner_reward: U256,
 	/// MCIP-3 Block reward ubi-base for basic income.
+
+	pub mcip10_transition: u64,
+	/// MCIP-3 Block reward coin-base for miners.
+	pub mcip10_miner_reward: U256,
+	/// MCIP-3 Block reward ubi-base for basic income.
+
 	pub mcip3_ubi_reward: U256,
 	/// MCIP-3 contract address for universal basic income.
 	pub mcip3_ubi_contract: Address,
@@ -152,6 +158,8 @@ impl From<ethjson::spec::EthashParams> for EthashParams {
 			mcip3_miner_reward: p.mcip3_miner_reward.map_or_else(Default::default, Into::into),
 			mcip8_transition: p.mcip8_transition.map_or(u64::max_value(), Into::into),
 			mcip8_miner_reward: p.mcip8_miner_reward.map_or_else(Default::default, Into::into),
+			mcip10_transition: p.mcip10_transition.map_or(u64::max_value(), Into::into),
+			mcip10_miner_reward: p.mcip10_miner_reward.map_or_else(Default::default, Into::into),			
 			mcip3_ubi_reward: p.mcip3_ubi_reward.map_or(U256::from(0), Into::into),
 			mcip3_ubi_contract: p.mcip3_ubi_contract.map_or_else(Address::new, Into::into),
 			mcip3_dev_reward: p.mcip3_dev_reward.map_or(U256::from(0), Into::into),
