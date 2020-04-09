@@ -159,7 +159,7 @@ impl From<ethjson::spec::EthashParams> for EthashParams {
 			mcip8_transition: p.mcip8_transition.map_or(u64::max_value(), Into::into),
 			mcip8_miner_reward: p.mcip8_miner_reward.map_or_else(Default::default, Into::into),
 			mcip10_transition: p.mcip10_transition.map_or(u64::max_value(), Into::into),
-			mcip10_miner_reward: p.mcip10_miner_reward.map_or_else(Default::default, Into::into),			
+			mcip10_miner_reward: p.mcip10_miner_reward.map_or_else(Default::default, Into::into),
 			mcip3_ubi_reward: p.mcip3_ubi_reward.map_or(U256::from(0), Into::into),
 			mcip3_ubi_contract: p.mcip3_ubi_contract.map_or_else(Address::new, Into::into),
 			mcip3_dev_reward: p.mcip3_dev_reward.map_or(U256::from(0), Into::into),
@@ -309,22 +309,24 @@ impl Engine<EthereumMachine> for Arc<Ethash> {
 			self.machine.add_balance(block, &author, &result_block_reward)?;
 		}
 
-		// Bestow uncle rewards.
-		for u in LiveBlock::uncles(&*block) {
-			let uncle_author = u.author();
-			let result_uncle_reward = if eras == 0 {
-				(reward * U256::from(8 + u.number() - number)).shr(3)
-			} else {
-				reward.shr(5)
-			};
+		// Bestow uncle rewards, if it's before MCIP10.
+		if number < self.ethash_params.mcip10_transition {
 
-			uncle_rewards.push((*uncle_author, result_uncle_reward));
+			for u in LiveBlock::uncles(&*block) {
+				let uncle_author = u.author();
+				let result_uncle_reward = if eras == 0 {
+					(reward * U256::from(8 + u.number() - number)).shr(3)
+				} else {
+					reward.shr(5)
+				};
+
+				uncle_rewards.push((*uncle_author, result_uncle_reward));
+			}
+
+			for &(ref a, ref reward) in &uncle_rewards {
+				self.machine.add_balance(block, a, reward)?;
+			}
 		}
-
-		for &(ref a, ref reward) in &uncle_rewards {
-			self.machine.add_balance(block, a, reward)?;
-		}
-
 		// Note and trace.
 		self.machine.note_rewards(block, &[(author, result_block_reward)], &uncle_rewards)
 	}
