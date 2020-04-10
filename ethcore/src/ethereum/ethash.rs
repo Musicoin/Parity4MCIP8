@@ -267,6 +267,8 @@ impl Engine<EthereumMachine> for Arc<Ethash> {
 		let eras_rounds = self.ethash_params.ecip1017_era_rounds;
 		let (eras, reward) = ecip1017_eras_block_reward(eras_rounds, reward, number);
 
+		let n_uncles = LiveBlock::uncles(&*block).len();
+		let mut uncle_rewards = Vec::with_capacity(n_uncles);
 
 		// Bestow block rewards.
 		let mut result_block_reward = reward + reward.shr(5) * U256::from(n_uncles);
@@ -308,12 +310,10 @@ impl Engine<EthereumMachine> for Arc<Ethash> {
 			self.machine.add_balance(block, &author, &result_block_reward)?;
 		}
 
-		let mut uncle_rewards = Vec::with_capacity(0);
+//		let mut uncle_rewards = Vec::with_capacity(0);
 
 		// Bestow uncle rewards, if it's before MCIP10.
-		if number < self.ethash_params.mcip10_transition {
-			let n_uncles = LiveBlock::uncles(&*block).len();
-			let mut uncle_rewards = Vec::with_capacity(n_uncles);
+//		if number < self.ethash_params.mcip10_transition {
 
 			for u in LiveBlock::uncles(&*block) {
 				let uncle_author = u.author();
@@ -329,7 +329,7 @@ impl Engine<EthereumMachine> for Arc<Ethash> {
 			for &(ref a, ref reward) in &uncle_rewards {
 				self.machine.add_balance(block, a, reward)?;
 			}
-		}
+//		}
 		// Note and trace.
 		self.machine.note_rewards(block, &[(author, result_block_reward)], &uncle_rewards)
 	}
