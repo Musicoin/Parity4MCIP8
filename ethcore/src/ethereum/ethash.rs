@@ -271,7 +271,7 @@ impl Engine<EthereumMachine> for Arc<Ethash> {
 
 		// Bestow block rewards.
 		let mut result_block_reward = reward + reward.shr(5) * U256::from(n_uncles);
-		let mut uncle_rewards = Vec::with_capacity(n_uncles);
+		//let mut uncle_rewards = Vec::with_capacity(n_uncles);
 
 		if number >= self.ethash_params.mcip10_transition {
 			result_block_reward = self.ethash_params.mcip10_miner_reward;
@@ -311,6 +311,7 @@ impl Engine<EthereumMachine> for Arc<Ethash> {
 
 		// Bestow uncle rewards, if it's before MCIP10.
 		if number < self.ethash_params.mcip10_transition {
+			let mut uncle_rewards = Vec::with_capacity(n_uncles);
 
 			for u in LiveBlock::uncles(&*block) {
 				let uncle_author = u.author();
