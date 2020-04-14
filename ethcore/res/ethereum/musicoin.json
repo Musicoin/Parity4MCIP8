@@ -34,7 +34,7 @@
     "accountStartNonce":"0x00",
     "maximumExtraDataSize":"0x20",
     "minGasLimit":"0x1388",
-    "networkID":"0x76740f",
+    "networkID":"0x7E4",
     "forkBlock":"0x1d8015",
     "forkCanonHash":"0x380602acf82b629a0be6b5adb2b4a801e960a07dc8261bf196d21befdbb8f2f9",
     "eip86Transition":"0x7fffffffffffff",
