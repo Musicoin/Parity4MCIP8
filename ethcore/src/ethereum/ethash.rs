@@ -275,7 +275,7 @@ impl Engine<EthereumMachine> for Arc<Ethash> {
 
 
 		if number >= self.ethash_params.mcip10_transition {
-			result_block_reward = 0; //self.ethash_params.mcip10_miner_reward;
+			result_block_reward = self.ethash_params.mcip10_miner_reward;
 			let ubi_contract = self.ethash_params.mcip3_ubi_contract;
 			let ubi_reward = self.ethash_params.mcip3_ubi_reward;
 			let dev_contract = self.ethash_params.mcip3_dev_contract;
