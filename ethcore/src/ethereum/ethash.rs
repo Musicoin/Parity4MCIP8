@@ -329,9 +329,15 @@ impl Engine<EthereumMachine> for Arc<Ethash> {
 			for &(ref a, ref reward) in &uncle_rewards {
 				self.machine.add_balance(block, a, reward)?;
 			}
+			self.machine.note_rewards(block, &[(author, result_block_reward)], &uncle_rewards)
+
+		} else{
+
+			// Note and trace with null uncles.
+			self.machine.note_rewards(block, &[(author, result_block_reward)], std::ptr::null)
+
 		}
-		// Note and trace.
-		self.machine.note_rewards(block, &[(author, result_block_reward)], &uncle_rewards)
+
 	}
 
 	fn verify_local_seal(&self, header: &Header) -> Result<(), Error> {
